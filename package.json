@@ -1,0 +1,54 @@
+{
+  "name": "ask-my-website",
+  "title": "Ask my Website",
+  "version": "0.0.1",
+  "description": "RAG any website",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "vite build --watch --m development",
+    "build": "tsc && vite build"
+  },
+  "author": "Nico Martin <nico@sayhello.ch>",
+  "license": "MIT",
+  "devDependencies": {
+    "@nico-martin/crxjs-vite-plugin": "^2.0.1-beta.3",
+    "@preact/preset-vite": "^2.9.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.3.0",
+    "@types/chrome": "^0.0.287",
+    "dotenv": "^16.4.5",
+    "prettier": "^3.4.1",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.0"
+  },
+  "dependencies": {
+    "@huggingface/transformers": "^3.0.2",
+    "@types/dom-chromium-ai": "^0.0.4",
+    "preact": "^10.25.0",
+    "showdown": "^2.1.0"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env",
+      "@babel/preset-react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-transform-react-jsx",
+        {
+          "pragma": "h"
+        }
+      ],
+      "@babel/plugin-transform-runtime"
+    ]
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5",
+    "importOrder": [
+      "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
+  }
+}
