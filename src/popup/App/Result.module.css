@@ -1,0 +1,78 @@
+.root {
+  padding-bottom: 0.25rem;
+}
+
+.answer {
+  padding: 0.75rem;
+
+  & > * + * {
+    margin-top: 0.3rem;
+  }
+}
+
+.sources {
+  padding: 0 0.75rem;
+  font-size: 0.9em;
+  margin-top: 0.5rem;
+  background-color: transparent;
+  border: none;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+
+  &.sourcesOpen {
+    .sourcesIcon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.sourcesIcon {
+  font-size: 1.2em;
+  transition: 200ms transform ease-in-out;
+}
+
+.resultList {
+  width: 100%;
+  margin: 0.25rem 0 1rem 0;
+  list-style: circle !important;
+}
+
+.result {
+  padding: 0 0.75rem;
+}
+
+.resultButton {
+  background-color: transparent;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
+  padding: 0 0 0 1.4em;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: 200ms opacity ease-in-out;
+  font-size: 0.8em;
+  position: relative;
+
+  &:hover {
+    opacity: 1;
+    .resultButtonIcon {
+      opacity: 1;
+    }
+  }
+}
+
+.resultButtonIcon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1em;
+  opacity: 0.5;
+  transition: 200ms opacity ease-in-out;
+  display: block;
+}

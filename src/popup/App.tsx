@@ -56,7 +56,9 @@ QUESTION:
   return (
     <div className={styles.root}>
       <Form className={styles.form} onSubmit={onSubmit} />
-      <Result className={styles.result} answer={answer} results={results} />
+      {answer !== '' && (
+        <Result className={styles.result} answer={answer} results={results} />
+      )}
     </div>
   );
 };
