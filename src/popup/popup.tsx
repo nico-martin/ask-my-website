@@ -11,6 +11,8 @@ const Popup = () => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [stats, setStats] = useState<VectorDBStats>(null);
+  const [conversationModeActive, setConversationModeActive] =
+    useState<boolean>(false);
 
   return (
     <div className={styles.root}>
@@ -20,9 +22,14 @@ const Popup = () => {
           setInitialized={() => setInitialized(true)}
           setTitle={setTitle}
           setStats={setStats}
+          setConversationModeActive={setConversationModeActive}
         />
       )}
-      <App title={title} stats={stats} />
+      <App
+        title={title}
+        stats={stats}
+        conversationModeActive={conversationModeActive}
+      />
     </div>
   );
 };

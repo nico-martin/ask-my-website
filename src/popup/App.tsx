@@ -7,8 +7,17 @@ import { sendMessage } from '../helpers/chromeMessages';
 import { useState } from 'preact/hooks';
 import getPrompt from '../helpers/getPrompt';
 import { VectorDBStats } from '../helpers/types';
+import Footer from './App/Footer';
 
-const App = ({ title, stats }: { title: string; stats: VectorDBStats }) => {
+const App = ({
+  title,
+  stats,
+  conversationModeActive,
+}: {
+  title: string;
+  stats: VectorDBStats;
+  conversationModeActive: boolean;
+}) => {
   const [answer, setAnswer] = useState<string>('');
   const [sources, setSources] = useState<
     Array<{ content: string; id: string }>
@@ -58,6 +67,10 @@ const App = ({ title, stats }: { title: string; stats: VectorDBStats }) => {
           vector embeddings and successfully added to the vector database.
         </p>
       ) : null}
+      <Footer
+        className={styles.footer}
+        conversationModeActive={conversationModeActive}
+      />
     </div>
   );
 };

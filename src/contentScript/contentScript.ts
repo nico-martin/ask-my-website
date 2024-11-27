@@ -1,65 +1,18 @@
-import extractWebsiteParts, { Part } from '../helpers/extractWebsiteParts';
-import VectorDB from '../helpers/VectorDB';
-import { VectorDBStats } from '../helpers/types';
+import renderApp from './App';
+import { initializeVectorDB, processQuery } from './db';
 
-const db = new VectorDB<Part>();
-let initialized = null;
-
-const initializeVectorDB = async (): Promise<VectorDBStats> => {
-  if (initialized) return initialized;
-
-  const main = document.querySelector('main') || document.querySelector('body');
-  const parsedContent = extractWebsiteParts(main);
-  const onlyParagraphs = parsedContent.filter((part) => part.tagName === 'p');
-  await db.setModel();
-  await db.addEntries(
-    onlyParagraphs.map((part) => ({ str: part.content, metadata: part }))
-  );
-  initialized = {
-    parsedCharacters: parsedContent.reduce(
-      (acc, curr) => acc + curr.content.length,
-      0
-    ),
-    entries: db.entries.length,
-    sections: parsedContent
-      .map((content) => content.sectionId)
-      .filter((value, index, array) => array.indexOf(value) === index).length,
-  };
-  return initialized;
-};
+let conversationMode = false;
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'initialize') {
     initializeVectorDB().then((stats) =>
-      sendResponse({ title: document.title, stats })
+      sendResponse({ title: document.title, stats, conversationMode })
     );
   }
 
   if (message.action === 'query') {
-    db.search(message.payload.query, 7, 0.5).then((results) => {
-      const sources = results
-        .map((result) => ({
-          content: result[0].metadata.content,
-          id: result[0].metadata.id,
-        }))
-        .filter((source) => Boolean(source.content));
-
-      const sections = results
-        .map((result) => result[0].metadata.sectionId)
-        .filter((value, index, array) => array.indexOf(value) === index);
-
-      const dbEntries = sections.map((section) =>
-        db.entries.filter((entry) => entry.metadata.sectionId === section)
-      );
-
-      const documentParts: Array<string> = dbEntries.map((entries) =>
-        entries
-          .filter((entry) => Boolean(entry.metadata.content))
-          .map((entry) => entry.metadata.content)
-          .join('\n')
-      );
-
-      sendResponse({ sources, documentParts });
+    processQuery(message.payload.query).then((response) => {
+      sendResponse(response);
     });
   }
 
@@ -85,6 +38,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       element.setAttribute('data-vectordb-highlighted', 'true');
     }
     sendResponse();
+  }
+
+  if (message.action === 'conversationMode') {
+    const id = 'ask-my-website';
+    if (message.payload) {
+      renderApp(id);
+      conversationMode = true;
+    } else {
+      const root = document.querySelector(`#${id}`);
+      if (root) root.remove();
+      conversationMode = false;
+    }
   }
   return true;
 });

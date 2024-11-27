@@ -9,21 +9,26 @@ const Initializer = ({
   setTitle,
   setStats,
   setInitialized,
+  setConversationModeActive,
   className = '',
 }: {
   setTitle: (title: string) => void;
   setStats: (stats: VectorDBStats) => void;
   setInitialized: () => void;
+  setConversationModeActive: (active: boolean) => void;
   className?: string;
 }) => {
   useEffect(() => {
-    sendMessage<{ title: string; stats: VectorDBStats }>('initialize').then(
-      ({ title, stats }) => {
-        setInitialized();
-        setTitle(title);
-        setStats(stats);
-      }
-    );
+    sendMessage<{
+      title: string;
+      stats: VectorDBStats;
+      conversationMode: boolean;
+    }>('initialize').then(({ title, stats, conversationMode }) => {
+      setInitialized();
+      setTitle(title);
+      setStats(stats);
+      setConversationModeActive(conversationMode);
+    });
   }, []);
 
   return (
