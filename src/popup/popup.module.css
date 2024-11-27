@@ -5,6 +5,12 @@ html {
 
 .root {
   width: 350px;
-  min-height: 80px;
   position: relative;
+}
+
+.initializer {
+  position: absolute;
+  inset: 0;
+  background-color: #fff;
+  z-index: 999;
 }

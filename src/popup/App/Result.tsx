@@ -10,11 +10,11 @@ const showdownConverter = new showdown.Converter();
 const Result = ({
   className,
   answer,
-  results,
+  sources,
 }: {
   className?: string;
   answer: string;
-  results: Array<{ content: string; id: string }>;
+  sources: Array<{ content: string; id: string }>;
 }) => {
   const [sourcesOpen, setSourcesOpen] = useState<boolean>(false);
   return (
@@ -25,7 +25,7 @@ const Result = ({
           __html: showdownConverter.makeHtml(answer),
         }}
       />
-      {results.length !== 0 && (
+      {sources.length !== 0 && (
         <Fragment>
           <button
             className={cn(styles.sources, {
@@ -37,7 +37,7 @@ const Result = ({
           </button>
           {sourcesOpen && (
             <ul className={styles.resultList}>
-              {results.map((result) => (
+              {sources.map((result) => (
                 <li className={styles.result}>
                   <button
                     className={styles.resultButton}

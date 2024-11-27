@@ -11,14 +11,14 @@ const Popup = () => {
 
   return (
     <div className={styles.root}>
-      {!initialized ? (
+      {!initialized && (
         <Initializer
+          className={styles.initializer}
           setInitialized={() => setInitialized(true)}
           setTitle={setTitle}
         />
-      ) : (
-        <App title={title} />
       )}
+      <App title={title} />
     </div>
   );
 };

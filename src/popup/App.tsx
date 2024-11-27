@@ -8,17 +8,17 @@ import { useState } from 'preact/hooks';
 
 const App = ({ title }: { title: string }) => {
   const [answer, setAnswer] = useState<string>('');
-  const [results, setResults] = useState<
+  const [sources, setSources] = useState<
     Array<{ content: string; id: string }>
   >([]);
 
   const onSubmit = async (query: string) => {
-    const data = await sendMessage<Array<{ content: string; id: string }>>(
-      'query',
-      {
-        query,
-      }
-    );
+    const { sources, documentParts } = await sendMessage<{
+      sources: Array<{ content: string; id: string }>;
+      documentParts: Array<string>;
+    }>('query', {
+      query,
+    });
 
     const session = await self.ai.languageModel.create({
       systemPrompt: 'You are a helpful AI assistant.',
@@ -39,9 +39,11 @@ QUESTION:
       .replace('{documentTitle}', title)
       .replace(
         '{results}',
-        data.map((result) => `"${result.content}"`).join('\n\n')
+        documentParts.map((document) => `"${document}"`).join('\n\n')
       )
       .replace('{question}', query);
+
+    console.log(prompt);
 
     const stream = session.promptStreaming(prompt);
     let answer = '';
@@ -50,15 +52,13 @@ QUESTION:
       answer = chunk;
       setAnswer(answer);
     }
-    setResults(data);
+    setSources(sources);
   };
 
   return (
     <div className={styles.root}>
       <Form className={styles.form} onSubmit={onSubmit} />
-      {answer !== '' && (
-        <Result className={styles.result} answer={answer} results={results} />
-      )}
+      <Result className={styles.result} answer={answer} sources={sources} />
     </div>
   );
 };
