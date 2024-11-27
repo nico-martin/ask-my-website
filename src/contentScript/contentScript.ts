@@ -37,10 +37,12 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.action === 'query') {
     db.search(message.payload.query, 7, 0.5).then((results) => {
-      const sources = results.map((result) => ({
-        content: result[0].metadata.content,
-        id: result[0].metadata.id,
-      }));
+      const sources = results
+        .map((result) => ({
+          content: result[0].metadata.content,
+          id: result[0].metadata.id,
+        }))
+        .filter((source) => Boolean(source.content));
 
       const sections = results
         .map((result) => result[0].metadata.sectionId)
