@@ -1,11 +1,12 @@
 import extractWebsiteParts, { Part } from '../helpers/extractWebsiteParts';
 import VectorDB from '../helpers/VectorDB';
+import { VectorDBStats } from '../helpers/types';
 
 const db = new VectorDB<Part>();
-let initialized = false;
+let initialized = null;
 
-const initializeVectorDB = async () => {
-  if (initialized) return;
+const initializeVectorDB = async (): Promise<VectorDBStats> => {
+  if (initialized) return initialized;
 
   const main = document.querySelector('main') || document.querySelector('body');
   const parsedContent = extractWebsiteParts(main);
@@ -14,16 +15,28 @@ const initializeVectorDB = async () => {
   await db.addEntries(
     onlyParagraphs.map((part) => ({ str: part.content, metadata: part }))
   );
-  initialized = true;
+  initialized = {
+    parsedCharacters: parsedContent.reduce(
+      (acc, curr) => acc + curr.content.length,
+      0
+    ),
+    entries: db.entries.length,
+    sections: parsedContent
+      .map((content) => content.sectionId)
+      .filter((value, index, array) => array.indexOf(value) === index).length,
+  };
+  return initialized;
 };
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'initialize') {
-    initializeVectorDB().then(() => sendResponse(document.title));
+    initializeVectorDB().then((stats) =>
+      sendResponse({ title: document.title, stats })
+    );
   }
 
   if (message.action === 'query') {
-    db.search(message.payload.query, 5, 0.75).then((results) => {
+    db.search(message.payload.query, 7, 0.5).then((results) => {
       const sources = results.map((result) => ({
         content: result[0].metadata.content,
         id: result[0].metadata.id,

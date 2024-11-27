@@ -5,8 +5,10 @@ import Result from './App/Result';
 import styles from './App.module.css';
 import { sendMessage } from '../helpers/chromeMessages';
 import { useState } from 'preact/hooks';
+import getPrompt from '../helpers/getPrompt';
+import { VectorDBStats } from '../helpers/types';
 
-const App = ({ title }: { title: string }) => {
+const App = ({ title, stats }: { title: string; stats: VectorDBStats }) => {
   const [answer, setAnswer] = useState<string>('');
   const [sources, setSources] = useState<
     Array<{ content: string; id: string }>
@@ -24,24 +26,7 @@ const App = ({ title }: { title: string }) => {
       systemPrompt: 'You are a helpful AI assistant.',
     });
 
-    const prompt = `INSTRUCTIONS:
-DOCUMENT contains parts of the website "{documentTitle}".
-Answer the users QUESTION using the DOCUMENT text below.
-Keep your answer ground in the facts of the DOCUMENT.
-If the DOCUMENT doesn’t contain the facts to answer the QUESTION, say that you can’t answer the question.
-Answer in Markdown format
-
-DOCUMENT:
-{results}
-
-QUESTION:
-{question}`
-      .replace('{documentTitle}', title)
-      .replace(
-        '{results}',
-        documentParts.map((document) => `"${document}"`).join('\n\n')
-      )
-      .replace('{question}', query);
+    const prompt = await getPrompt(session, documentParts, title, query);
 
     console.log(prompt);
 
@@ -52,13 +37,27 @@ QUESTION:
       answer = chunk;
       setAnswer(answer);
     }
-    setSources(sources);
+    setSources(sources.filter((source) => prompt.includes(source.content)));
   };
 
   return (
     <div className={styles.root}>
       <Form className={styles.form} onSubmit={onSubmit} />
-      <Result className={styles.result} answer={answer} sources={sources} />
+      {answer !== '' ? (
+        <Result className={styles.result} answer={answer} sources={sources} />
+      ) : stats ? (
+        <p className={styles.stats}>
+          The document has been parsed and{' '}
+          <span>
+            {new Intl.NumberFormat('de-CH').format(stats.parsedCharacters)}
+          </span>{' '}
+          characters in{' '}
+          <span>{new Intl.NumberFormat('de-CH').format(stats.sections)}</span>{' '}
+          sections were transformed into{' '}
+          <span>{new Intl.NumberFormat('de-CH').format(stats.entries)}</span>{' '}
+          vector embeddings and successfully added to the vector database.
+        </p>
+      ) : null}
     </div>
   );
 };
