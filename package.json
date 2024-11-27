@@ -24,6 +24,7 @@
   "dependencies": {
     "@huggingface/transformers": "^3.0.2",
     "@types/dom-chromium-ai": "^0.0.4",
+    "lucide-react": "^0.462.0",
     "preact": "^10.25.0",
     "showdown": "^2.1.0"
   },

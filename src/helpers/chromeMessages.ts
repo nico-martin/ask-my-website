@@ -30,36 +30,18 @@ export enum ResponseState {
   ERROR = 'ERROR',
 }
 
-export const sendMessage = <A extends ActionNames>(
-  action: A,
-  payload?: ActionPayload<A>
-): Promise<ActionReturn<A>> =>
+export const sendMessage = <T = {}>(
+  action: string,
+  payload?: any
+): Promise<T> =>
   new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (tabs[0]) {
         const tabId = tabs[0].id;
         // Send a message to the content script of the active tab
-        chrome.tabs.sendMessage(
-          tabId,
-          { action, payload },
-          (response: { payload: ActionReturn<A>; state: ResponseState }) => {
-            if (
-              chrome.runtime.lastError ||
-              !response.state ||
-              response.state === ResponseState.ERROR
-            ) {
-              console.log('error', response);
-              reject(
-                chrome.runtime.lastError ||
-                  new Error('Failed to get a valid response')
-              );
-            } else {
-              console.log('resolve', response.payload);
-              // @ts-ignore
-              resolve(response.payload);
-            }
-          }
-        );
+        chrome.tabs.sendMessage(tabId, { action, payload }, (response) => {
+          resolve(response);
+        });
       }
     });
   });

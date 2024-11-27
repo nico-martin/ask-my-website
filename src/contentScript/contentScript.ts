@@ -81,7 +81,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'initialize') {
-    initializeVectorDB().then(() => sendResponse());
+    initializeVectorDB().then(() => sendResponse(document.title));
   }
 
   if (message.action === 'query') {
