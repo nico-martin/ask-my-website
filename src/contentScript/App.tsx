@@ -73,6 +73,7 @@ const App = () => {
     document.addEventListener('keyup', keyup);
 
     return () => {
+      console.log('cleanup');
       document.removeEventListener('keydown', keydown);
       document.removeEventListener('keyup', keyup);
     };
@@ -116,11 +117,17 @@ const App = () => {
   );
 };
 
-const renderApp = (id: string) => {
+export const renderApp = (id: string) => {
   const root = document.createElement('div');
   root.id = id;
   document.body.appendChild(root);
   root && render(createElement(App, {}), root);
 };
 
-export default renderApp;
+export const removeApp = (id: string) => {
+  const root = document.getElementById(id);
+  if (root) {
+    render(null, root);
+    root.remove();
+  }
+};

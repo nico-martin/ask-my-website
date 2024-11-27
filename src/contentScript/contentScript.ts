@@ -1,4 +1,4 @@
-import renderApp from './App';
+import { renderApp, removeApp } from './App';
 import { initializeVectorDB, processQuery } from './db';
 
 let conversationMode = false;
@@ -46,8 +46,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       renderApp(id);
       conversationMode = true;
     } else {
-      const root = document.querySelector(`#${id}`);
-      if (root) root.remove();
+      removeApp(id);
       conversationMode = false;
     }
   }
