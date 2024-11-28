@@ -1,7 +1,16 @@
-.root {
+.container {
+  transform: translateX(200%);
+  transition: 200ms ease-in-out transform;
   position: fixed;
   bottom: 40px;
   right: 40px;
+
+  &.containerVisible {
+    transform: translateX(0);
+  }
+}
+
+.root {
 }
 
 .button {
@@ -11,4 +20,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.meta {
+  background-color: #fff;
+  border: 1px solid #535353;
+  border-radius: 0.5rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: 200ms ease-in-out transform;
+  transform: translateY(calc(110% * -1)) translateX(calc(100% + 60px));
+  max-width: 220px;
+}
+
+.metaVisible {
+  transform: translateY(calc(110% * -1)) translateX(0);
 }

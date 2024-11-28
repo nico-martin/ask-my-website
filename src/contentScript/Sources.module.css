@@ -1,0 +1,47 @@
+.root {
+  padding: 0.75rem;
+}
+
+.list {
+  margin: 0.25rem 0 0.75rem 0;
+  list-style: none;
+}
+
+.item {
+  padding: 0;
+}
+
+.button {
+  background-color: transparent;
+  border: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+  text-align: left;
+  padding: 0 0 0 1.4em;
+  opacity: 0.8;
+  cursor: pointer;
+  transition: 200ms opacity ease-in-out;
+  font-size: 0.8em;
+  position: relative;
+
+  &:hover {
+    opacity: 1;
+
+    .buttonIcon {
+      opacity: 1;
+    }
+  }
+}
+
+.buttonIcon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1em;
+  opacity: 0.5;
+  transition: 200ms opacity ease-in-out;
+  display: block;
+}

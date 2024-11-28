@@ -2,7 +2,7 @@ const cleanHtmlContent = (htmlContent: string): string => {
   const parser = new DOMParser();
   const doc = parser.parseFromString(htmlContent, 'text/html');
   const elements = Array.from(
-    doc.querySelectorAll('h1, h2, h3, h4, h5, h6, p')
+    doc.querySelectorAll('h1, h2, h3, h4, h5, h6, p, li, td')
   );
 
   return elements.map((el) => el.outerHTML).join('\n');

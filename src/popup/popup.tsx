@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 import './styles/reset.css';
 import './styles/typography.css';
 import styles from './popup.module.css';
@@ -13,9 +13,10 @@ const Popup = () => {
   const [stats, setStats] = useState<VectorDBStats>(null);
   const [conversationModeActive, setConversationModeActive] =
     useState<boolean>(false);
+  const rootRef = useRef<HTMLDivElement>();
 
   return (
-    <div className={styles.root}>
+    <div className={styles.root} ref={rootRef}>
       {!initialized && (
         <Initializer
           className={styles.initializer}

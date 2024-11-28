@@ -7,6 +7,8 @@ import SpeechToText from '../helpers/SpeechToText';
 import textToSpeech from '../helpers/textToSpeech';
 import { processQuery } from './db';
 import getPrompt from '../helpers/getPrompt';
+import Sources from './Sources';
+import cn from '../helpers/classnames';
 
 enum State {
   IDLE,
@@ -15,11 +17,14 @@ enum State {
   SPEAKING,
 }
 
-const ICON_SIZE = 40;
+const ICON_SIZE = 35;
 
 const App = () => {
-  const [visible, setVisible] = useState<boolean>(false);
+  const [metaVisible, setMetaVisible] = useState<boolean>(false);
   const [state, setState] = useState<State>(State.IDLE);
+  const [sources, setSources] = useState<
+    Array<{ content: string; id: string }>
+  >([]);
 
   useEffect(() => {
     const speechToText = new SpeechToText();
@@ -58,6 +63,11 @@ const App = () => {
           );
           console.log(prompt);
           const answer = await session.prompt(prompt);
+
+          setSources(
+            results.sources.filter((source) => prompt.includes(source.content))
+          );
+
           setState(State.SPEAKING);
           await textToSpeech(answer);
           setState(State.IDLE);
@@ -73,7 +83,6 @@ const App = () => {
     document.addEventListener('keyup', keyup);
 
     return () => {
-      console.log('cleanup');
       document.removeEventListener('keydown', keydown);
       document.removeEventListener('keyup', keyup);
     };
@@ -81,10 +90,17 @@ const App = () => {
 
   return (
     <div className={styles.root}>
+      <div
+        className={cn(styles.meta, {
+          [styles.metaVisible]: metaVisible && sources.length !== 0,
+        })}
+      >
+        <Sources sources={sources} />
+      </div>
       <button
         style={{ width: ICON_SIZE * 1.7, height: ICON_SIZE * 1.7 }}
         className={styles.button}
-        onClick={() => setVisible((v) => !v)}
+        onClick={() => setMetaVisible((v) => !v)}
       >
         {state === State.IDLE ? (
           <FileQuestion size={ICON_SIZE} />
@@ -122,12 +138,17 @@ export const renderApp = (id: string) => {
   root.id = id;
   document.body.appendChild(root);
   root && render(createElement(App, {}), root);
+  root.classList.add(styles.container);
+  window.setTimeout(() => root.classList.add(styles.containerVisible), 10);
 };
 
 export const removeApp = (id: string) => {
   const root = document.getElementById(id);
   if (root) {
-    render(null, root);
-    root.remove();
+    root.classList.remove(styles.containerVisible);
+    window.setTimeout(() => {
+      render(null, root);
+      root.remove();
+    }, 200);
   }
 };

@@ -46,6 +46,7 @@ const App = ({
       answer = chunk;
       setAnswer(answer);
     }
+
     setSources(sources.filter((source) => prompt.includes(source.content)));
   };
 
