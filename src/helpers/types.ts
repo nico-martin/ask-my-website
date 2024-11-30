@@ -3,3 +3,8 @@ export interface VectorDBStats {
   entries: number;
   sections: number;
 }
+
+export interface Source {
+  content: string;
+  id: string;
+}

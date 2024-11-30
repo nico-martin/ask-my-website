@@ -1,20 +1,30 @@
 import { renderApp, removeApp } from './App';
 import { initializeVectorDB, processQuery } from './db';
 import highlightParagraph from '../helpers/highlightParagraph';
+import { VectorDBStats } from '../helpers/types';
 
 let conversationMode = false;
 
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.action === 'initialize') {
-    initializeVectorDB().then((stats) =>
-      sendResponse({ title: document.title, stats, conversationMode })
-    );
-  }
+const searchForQuery = async (
+  query: string = null
+): Promise<{
+  dbStats: VectorDBStats;
+  dbResponse: {
+    sources: Array<{ content: string; id: string }>;
+    documentParts: Array<string>;
+  };
+  documentTitle: string;
+}> => {
+  const dbStats = await initializeVectorDB();
+  const dbResponse = query ? await processQuery(query) : null;
+  return { dbStats, dbResponse, documentTitle: document.title };
+};
 
-  if (message.action === 'query') {
-    processQuery(message.payload.query).then((response) => {
-      sendResponse(response);
-    });
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.action === 'queryVectorDB') {
+    searchForQuery(message?.payload?.query || '').then((resp) =>
+      sendResponse(resp)
+    );
   }
 
   if (message.action === 'highlight') {
@@ -24,13 +34,14 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
   if (message.action === 'conversationMode') {
     const id = 'ask-my-website';
-    if (message.payload) {
+    if (message.payload === true) {
       renderApp(id);
       conversationMode = true;
-    } else {
+    } else if (message.payload === false) {
       removeApp(id);
       conversationMode = false;
     }
+    sendResponse(conversationMode);
   }
   return true;
 });

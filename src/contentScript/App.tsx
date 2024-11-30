@@ -5,10 +5,9 @@ import { Loader } from '../theme';
 import styles from './App.module.css';
 import SpeechToText from '../helpers/SpeechToText';
 import textToSpeech from '../helpers/textToSpeech';
-import { processQuery } from './db';
-import getPrompt from '../helpers/getPrompt';
 import Sources from './Sources';
 import cn from '../helpers/classnames';
+import { runLanguageModelInServiceWorker } from '../helpers/chromeMessages';
 
 enum State {
   IDLE,
@@ -50,26 +49,16 @@ const App = () => {
         const text = await speechToText.stop();
         setState(State.THINKING);
         try {
-          const results = await processQuery(text);
-          const session = await self.ai.languageModel.create({
-            systemPrompt: 'You are a helpful AI assistant.',
-          });
-
-          const prompt = await getPrompt(
-            session,
-            results.documentParts,
-            document.title,
-            text
-          );
-          console.log(prompt);
-          const answer = await session.prompt(prompt);
+          const done = await runLanguageModelInServiceWorker(text);
 
           setSources(
-            results.sources.filter((source) => prompt.includes(source.content))
+            done.sources.filter((source) =>
+              done.prompt.includes(source.content)
+            )
           );
 
           setState(State.SPEAKING);
-          await textToSpeech(answer);
+          await textToSpeech(done.answer);
           setState(State.IDLE);
         } catch (e) {
           setState(State.SPEAKING);

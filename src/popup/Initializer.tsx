@@ -1,55 +1,51 @@
-import { useEffect, useState, useRef } from 'preact/hooks';
-import { sendMessage } from '../helpers/chromeMessages';
+import { useEffect, useState } from 'preact/hooks';
 import { Loader } from '../theme';
 import styles from './Initializer.module.css';
 import cn from '../helpers/classnames';
 import { VectorDBStats } from '../helpers/types';
+import {
+  getInitializeVectorDBFromContent,
+  getConversationModeFromContent,
+} from '../helpers/chromeMessages';
+import { TriangleAlert } from 'lucide-react';
 
 const Initializer = ({
-  setTitle,
   setStats,
   setInitialized,
   setConversationModeActive,
   className = '',
 }: {
-  setTitle: (title: string) => void;
   setStats: (stats: VectorDBStats) => void;
   setInitialized: () => void;
   setConversationModeActive: (active: boolean) => void;
   className?: string;
 }) => {
+  const [error, setError] = useState<string>('');
   const initialize = () =>
-    sendMessage<{
-      title: string;
-      stats: VectorDBStats;
-      conversationMode: boolean;
-    }>('initialize').then(({ title, stats, conversationMode }) => {
-      setInitialized();
-      setTitle(title);
-      setStats(stats);
+    Promise.all([
+      getInitializeVectorDBFromContent(),
+      getConversationModeFromContent(),
+    ]).then(([vectorDB, conversationMode]) => {
+      setStats(vectorDB.dbStats);
       setConversationModeActive(conversationMode);
     });
 
-  const tryInitialize = async () => {
-    let init = false;
-    while (!init) {
-      try {
-        await initialize();
-        init = true;
-      } catch (e) {
-        console.error(e);
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    }
-  };
-
   useEffect(() => {
-    tryInitialize();
+    initialize()
+      .then(() => setInitialized())
+      .catch((e) => setError(e.message));
   }, []);
 
   return (
     <div className={cn(styles.root, className)}>
-      <Loader className={styles.loader} />
+      {error ? (
+        <div className={styles.error}>
+          <TriangleAlert className={styles.errorIcon} size="1.5rem" />
+          <p className={styles.errorText}>{error}</p>
+        </div>
+      ) : (
+        <Loader className={styles.loader} />
+      )}
     </div>
   );
 };

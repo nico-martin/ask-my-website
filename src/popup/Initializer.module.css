@@ -1,4 +1,8 @@
 .root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 }
 
 .loader {
@@ -8,4 +12,20 @@
   left: 50%;
   transform: translate(-50%, -50%);
   opacity: 0.8;
+}
+
+.error {
+  padding: 2rem;
+  color: #c81717;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.errorIcon {
+  flex: 1 0 auto;
+}
+
+.errorText {
+  font-size: 0.8rem;
 }

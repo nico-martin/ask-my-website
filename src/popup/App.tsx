@@ -1,19 +1,15 @@
 import Form from './App/Form';
 import Result from './App/Result';
-
 import styles from './App.module.css';
-import { sendMessage } from '../helpers/chromeMessages';
 import { useState } from 'preact/hooks';
-import getPrompt from '../helpers/getPrompt';
 import { VectorDBStats } from '../helpers/types';
 import Footer from './App/Footer';
+import { runLanguageModelStreamInServiceWorker } from '../helpers/chromeMessages';
 
 const App = ({
-  title,
   stats,
   conversationModeActive,
 }: {
-  title: string;
   stats: VectorDBStats;
   conversationModeActive: boolean;
 }) => {
@@ -23,30 +19,12 @@ const App = ({
   >([]);
 
   const onSubmit = async (query: string) => {
-    const { sources, documentParts } = await sendMessage<{
-      sources: Array<{ content: string; id: string }>;
-      documentParts: Array<string>;
-    }>('query', {
-      query,
+    const done = await runLanguageModelStreamInServiceWorker(query, (resp) => {
+      setAnswer(resp.answer);
+      setSources(resp.sources);
     });
-
-    const session = await self.ai.languageModel.create({
-      systemPrompt: 'You are a helpful AI assistant.',
-    });
-
-    const prompt = await getPrompt(session, documentParts, title, query);
-
-    console.log(prompt);
-
-    const stream = session.promptStreaming(prompt);
-    let answer = '';
-    // @ts-ignore
-    for await (const chunk of stream) {
-      answer = chunk;
-      setAnswer(answer);
-    }
-
-    setSources(sources.filter((source) => prompt.includes(source.content)));
+    setAnswer(done.answer);
+    setSources(done.sources);
   };
 
   return (

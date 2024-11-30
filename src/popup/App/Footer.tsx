@@ -1,6 +1,6 @@
 import cn from '../../helpers/classnames';
 import styles from './Footer.module.css';
-import { sendMessage } from '../../helpers/chromeMessages';
+import { setConversationModeFromContent } from '../../helpers/chromeMessages';
 
 const Footer = ({
   className = '',
@@ -17,8 +17,7 @@ const Footer = ({
           id="conversationMode"
           defaultChecked={conversationModeActive}
           onClick={(e) =>
-            sendMessage(
-              'conversationMode',
+            setConversationModeFromContent(
               (e.target as HTMLInputElement).checked
             )
           }

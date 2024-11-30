@@ -26,7 +26,8 @@ const getPrompt = async (
   session: AILanguageModel,
   documents: Array<string>,
   title: string,
-  query: string
+  query: string,
+  log: boolean = false
 ) => {
   const tokensLeft = session.tokensLeft;
   let valid = false;
@@ -35,13 +36,13 @@ const getPrompt = async (
   while (!valid) {
     prompt = gereatePrompt(documents, title, query);
     const tokens = await session.countPromptTokens(prompt);
-    console.log('Prompt tokens:', tokens);
-    console.log('tokens left:', tokensLeft);
-    console.log('documents:', documents.length);
+    log && console.log('Prompt tokens:', tokens);
+    log && console.log('tokens left:', tokensLeft);
+    log && console.log('documents:', documents.length);
     if (tokens < tokensLeft) {
       valid = true;
     } else {
-      console.log('Prompt too long, retrying');
+      log && console.log('Prompt too long, retrying');
       documents.pop();
     }
   }

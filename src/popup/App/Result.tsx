@@ -1,10 +1,10 @@
 import { Fragment } from 'preact';
-import { sendMessage } from '../../helpers/chromeMessages';
 import showdown from 'showdown';
 import { Link2, ChevronDown } from 'lucide-react';
 import styles from './Result.module.css';
 import cn from '../../helpers/classnames';
 import { useState } from 'preact/hooks';
+import { highlightParagraphFromContent } from '../../helpers/chromeMessages';
 
 const showdownConverter = new showdown.Converter();
 const Result = ({
@@ -42,9 +42,7 @@ const Result = ({
                   <button
                     className={styles.resultButton}
                     onClick={async () => {
-                      await sendMessage('highlight', {
-                        id: result.id,
-                      });
+                      await highlightParagraphFromContent(result.id);
                     }}
                   >
                     <Link2 size="1em" className={styles.resultButtonIcon} />

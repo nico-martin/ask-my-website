@@ -21,7 +21,10 @@ const manifest = defineManifest(async (env) => ({
       js: ['src/contentScript/contentScript.ts'],
     },
   ],
-  permissions: ['scripting', 'storage'],
+  permissions: ['scripting', 'aiLanguageModelOriginTrial'],
+  trial_tokens: [
+    'ApBa2wab7qVWbdbmXgHvblFpIq3czbg++FqY+WVrlxBb1rvVdtWBlAU/CseeyqWBZsjL3P8eZWSfu5MgtGFhgA8AAAB4eyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vamxmZ3BoZGlwY2ZvaWxia2locGFpa2lrZGFobGJkcGciLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElGb3JFeHRlbnNpb24iLCJleHBpcnkiOjE3NjA0ODYzOTl9',
+  ],
   host_permissions: ['<all_urls>'],
   action: {
     default_title: 'Ask my Website',

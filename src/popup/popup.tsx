@@ -1,5 +1,5 @@
 import { render } from 'preact';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useRef, useState } from 'preact/hooks';
 import './styles/reset.css';
 import './styles/typography.css';
 import styles from './popup.module.css';
@@ -9,7 +9,6 @@ import { VectorDBStats } from '../helpers/types';
 
 const Popup = () => {
   const [initialized, setInitialized] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('');
   const [stats, setStats] = useState<VectorDBStats>(null);
   const [conversationModeActive, setConversationModeActive] =
     useState<boolean>(false);
@@ -21,16 +20,11 @@ const Popup = () => {
         <Initializer
           className={styles.initializer}
           setInitialized={() => setInitialized(true)}
-          setTitle={setTitle}
           setStats={setStats}
           setConversationModeActive={setConversationModeActive}
         />
       )}
-      <App
-        title={title}
-        stats={stats}
-        conversationModeActive={conversationModeActive}
-      />
+      <App stats={stats} conversationModeActive={conversationModeActive} />
     </div>
   );
 };
