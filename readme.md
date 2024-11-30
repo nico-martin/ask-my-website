@@ -24,7 +24,7 @@ The core of the extension is a RAG set up. This means that we use a predefined p
 
 1. The content of the website is parsed and split into sections. Each section consists of the heading (H1, H2, H3) and the following paragraphs (p, li or td tags)
 2. Each paragraph is then vectorized using a `sentence-transformers` library with [Transformers.js](https://huggingface.co/docs/transformers.js/en/index)
-3. Once the use asks a question the extension will find the most similar paragraphs and adds its section as context to the prompt
+3. Once the use asks a question the extension will find the most similar paragraphs and adds its section as context to the prompt. The paragraph itself is considered a "source"
 4. The prompt is then sent to the PromptAPI and the answer is displayed to the user
 5. The sources are displayed as well and can easily be accessed
 
