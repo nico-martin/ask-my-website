@@ -61,6 +61,16 @@ const runLanguageModel = async (
 };
 
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+  if (request.action === 'checkLanguageModelAvailability') {
+    // @ts-ignore
+    (chrome.aiOriginTrial.languageModel as AILanguageModelFactory)
+      .capabilities()
+      .then((response) => sendResponse(response.available));
+  }
+  return true;
+});
+
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'runLanguageModel') {
     const query = request.payload.query;
     runLanguageModel(query).then((response) => sendResponse(response));

@@ -87,6 +87,21 @@ export const runLanguageModelInServiceWorker = (
     }
   });
 
+export const getLanguageModelAvailabilityInServiceWorker =
+  (): Promise<AICapabilityAvailability> =>
+    new Promise((resolve, reject) => {
+      try {
+        chrome.runtime.sendMessage(
+          {
+            action: 'checkLanguageModelAvailability',
+          },
+          (response) => resolve(response)
+        );
+      } catch (e) {
+        reject(e);
+      }
+    });
+
 export const runLanguageModelStreamInServiceWorker = (
   query: string,
   callback?: ({

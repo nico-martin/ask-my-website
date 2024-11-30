@@ -10,6 +10,8 @@ import { VectorDBStats } from '../helpers/types';
 const Popup = () => {
   const [initialized, setInitialized] = useState<boolean>(false);
   const [stats, setStats] = useState<VectorDBStats>(null);
+  const [languageModelStatus, setLanguageModelStatus] =
+    useState<AICapabilityAvailability>(null);
   const [conversationModeActive, setConversationModeActive] =
     useState<boolean>(false);
   const rootRef = useRef<HTMLDivElement>();
@@ -19,12 +21,19 @@ const Popup = () => {
       {!initialized && (
         <Initializer
           className={styles.initializer}
-          setInitialized={() => setInitialized(true)}
+          setInitialized={(languageModelStatus: AICapabilityAvailability) => {
+            setLanguageModelStatus(languageModelStatus);
+            setInitialized(true);
+          }}
           setStats={setStats}
           setConversationModeActive={setConversationModeActive}
         />
       )}
-      <App stats={stats} conversationModeActive={conversationModeActive} />
+      <App
+        stats={stats}
+        languageModelStatus={languageModelStatus}
+        conversationModeActive={conversationModeActive}
+      />
     </div>
   );
 };

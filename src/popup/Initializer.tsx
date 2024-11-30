@@ -6,6 +6,7 @@ import { VectorDBStats } from '../helpers/types';
 import {
   getInitializeVectorDBFromContent,
   getConversationModeFromContent,
+  getLanguageModelAvailabilityInServiceWorker,
 } from '../helpers/chromeMessages';
 import { TriangleAlert } from 'lucide-react';
 
@@ -16,23 +17,30 @@ const Initializer = ({
   className = '',
 }: {
   setStats: (stats: VectorDBStats) => void;
-  setInitialized: () => void;
+  setInitialized: (languageModelStatus: AICapabilityAvailability) => void;
   setConversationModeActive: (active: boolean) => void;
   className?: string;
 }) => {
   const [error, setError] = useState<string>('');
+
   const initialize = () =>
     Promise.all([
       getInitializeVectorDBFromContent(),
       getConversationModeFromContent(),
-    ]).then(([vectorDB, conversationMode]) => {
-      setStats(vectorDB.dbStats);
-      setConversationModeActive(conversationMode);
-    });
+      getLanguageModelAvailabilityInServiceWorker(),
+    ]);
 
   useEffect(() => {
     initialize()
-      .then(() => setInitialized())
+      .then(([vectorDB, conversationMode, availability]) => {
+        setStats(vectorDB.dbStats);
+        setConversationModeActive(conversationMode);
+        if (availability === 'no') {
+          setError('The language model is not available in your browser');
+        } else {
+          setInitialized(availability);
+        }
+      })
       .catch((e) => setError(e.message));
   }, []);
 

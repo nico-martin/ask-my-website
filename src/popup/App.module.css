@@ -32,6 +32,22 @@
   }
 }
 
+.languageModelWarning {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  color: #c14b01;
+
+  .languageModelWarningIcon {
+    flex: 1 0 auto;
+  }
+
+  .languageModelWarningText {
+    font-size: 0.6rem;
+  }
+}
+
 .footer {
   position: fixed;
   bottom: 0;
