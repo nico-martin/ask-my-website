@@ -2,7 +2,7 @@
   "name": "ask-my-website",
   "title": "Ask my Website",
   "version": "0.0.1",
-  "description": "RAG any website",
+  "description": "A Chrome extension that uses PromptAPI and vector embeddings to help users quickly find answers about the current website's content.",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {

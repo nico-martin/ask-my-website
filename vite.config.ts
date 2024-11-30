@@ -2,7 +2,7 @@ import { crx, defineManifest } from '@nico-martin/crxjs-vite-plugin';
 import preact from '@preact/preset-vite';
 import { defineConfig } from 'vite';
 
-import { version, title } from './package.json';
+import { version, title, description } from './package.json';
 
 const [major, minor, patch, label = '0'] = version
   .replace(/[^\d.-]+/g, '')
@@ -10,7 +10,7 @@ const [major, minor, patch, label = '0'] = version
 
 const manifest = defineManifest(async (env) => ({
   name: (env.mode === 'staging' ? '[INTERNAL] ' : '') + title,
-  description: title,
+  description,
   manifest_version: 3,
   background: {
     service_worker: 'src/serviceWorker/serviceWorker.ts',
