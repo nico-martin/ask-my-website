@@ -22,7 +22,7 @@ const Sources = ({
               onClick={() => {
                 highlightParagraph(source.id);
               }}
-              className={styles.button}
+              className={cn(styles.button, 'fs-small')}
             >
               <Link2 size="1em" className={styles.buttonIcon} />
               {source.content}

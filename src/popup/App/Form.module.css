@@ -3,8 +3,8 @@
 
 .form {
   display: flex;
-  background-color: #ececec;
-  border-bottom: 1px solid #cacaca;
+  background-color: #e1eae6;
+  border-bottom: 1px solid #a6b5ae;
   align-items: center;
   padding: 0.5rem;
   gap: 0.5rem;
@@ -13,7 +13,7 @@
 .label {
   width: 100%;
   background-color: #fff;
-  border: 1px solid #cacaca;
+  border: 1px solid #a6b5ae;
   border-radius: 5px;
   display: flex;
   align-items: flex-start;

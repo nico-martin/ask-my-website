@@ -17,10 +17,10 @@ enum State {
   SPEAKING,
 }
 
-const ICON_SIZE = 35;
+const ICON_SIZE = 30;
 
 const App = () => {
-  const [metaVisible, setMetaVisible] = useState<boolean>(false);
+  const [metaVisible, setMetaVisible] = useState<boolean>(true);
   const [state, setState] = useState<State>(State.IDLE);
   const [sources, setSources] = useState<
     Array<{ content: string; id: string }>
@@ -92,7 +92,10 @@ const App = () => {
     <div className={styles.root}>
       <div
         className={cn(styles.meta, {
-          [styles.metaVisible]: metaVisible && sources.length !== 0,
+          [styles.metaVisible]:
+            metaVisible &&
+            sources.length !== 0 &&
+            (state === State.IDLE || state === State.SPEAKING),
         })}
       >
         <Sources sources={sources} />

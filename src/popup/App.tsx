@@ -1,4 +1,3 @@
-import { Fragment } from 'preact';
 import Form from './App/Form';
 import Result from './App/Result';
 

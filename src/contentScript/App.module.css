@@ -4,6 +4,7 @@
   position: fixed;
   bottom: 40px;
   right: 40px;
+  z-index: 9999;
 
   &.containerVisible {
     transform: translateX(0);
@@ -11,6 +12,36 @@
 }
 
 .root {
+  p,
+  li,
+  ul,
+  button {
+    margin: 0;
+    font-size: 16px;
+    line-height: 1.4 !important;
+    color: #000;
+    font-family: Arial, sans-serif !important;
+    font-weight: 400 !important;
+
+    b {
+      font-weight: 700 !important;
+    }
+
+    &:global(.fs-small) {
+      font-size: 14px;
+    }
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  button:hover,
+  button:focus,
+  button:active {
+    color: #000;
+    background-color: transparent;
+  }
 }
 
 .button {
@@ -22,6 +53,16 @@
   justify-content: center;
   box-shadow: 0 0 1.5rem rgba(0, 0, 0, 0.2);
   cursor: pointer;
+  color: #000;
+  font-weight: 400;
+  padding: 0;
+
+  &:hover {
+    background-color: #fff;
+    border: 1px solid #535353;
+    color: #000;
+    font-weight: 400;
+  }
 }
 
 .meta {

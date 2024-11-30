@@ -3,7 +3,7 @@
 }
 
 .list {
-  margin: 0.25rem 0 0.75rem 0;
+  margin: 0.75rem 0 !important;
   list-style: none;
 }
 
@@ -25,9 +25,12 @@
   transition: 200ms opacity ease-in-out;
   font-size: 0.8em;
   position: relative;
+  height: inherit !important;
 
   &:hover {
     opacity: 1;
+    background-color: transparent;
+    border: none;
 
     .buttonIcon {
       opacity: 1;

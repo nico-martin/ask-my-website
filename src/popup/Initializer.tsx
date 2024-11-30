@@ -18,7 +18,7 @@ const Initializer = ({
   setConversationModeActive: (active: boolean) => void;
   className?: string;
 }) => {
-  useEffect(() => {
+  const initialize = () =>
     sendMessage<{
       title: string;
       stats: VectorDBStats;
@@ -29,6 +29,22 @@ const Initializer = ({
       setStats(stats);
       setConversationModeActive(conversationMode);
     });
+
+  const tryInitialize = async () => {
+    let init = false;
+    while (!init) {
+      try {
+        await initialize();
+        init = true;
+      } catch (e) {
+        console.error(e);
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
+  };
+
+  useEffect(() => {
+    tryInitialize();
   }, []);
 
   return (
