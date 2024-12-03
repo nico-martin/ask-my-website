@@ -19,7 +19,7 @@ enum State {
 const ICON_SIZE = 30;
 
 const App = () => {
-  const [metaVisible, setMetaVisible] = useState<boolean>(true);
+  const [metaVisible, setMetaVisible] = useState<boolean>(false);
   const [state, setState] = useState<State>(State.IDLE);
   const [sources, setSources] = useState<
     Array<{ content: string; id: string }>

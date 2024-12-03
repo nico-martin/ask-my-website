@@ -21,11 +21,10 @@ const manifest = defineManifest(async (env) => ({
       js: ['src/contentScript/contentScript.ts'],
     },
   ],
-  permissions: ['scripting', 'aiLanguageModelOriginTrial'],
+  permissions: ['aiLanguageModelOriginTrial', 'activeTab'],
   trial_tokens: [
-    'ApBa2wab7qVWbdbmXgHvblFpIq3czbg++FqY+WVrlxBb1rvVdtWBlAU/CseeyqWBZsjL3P8eZWSfu5MgtGFhgA8AAAB4eyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vamxmZ3BoZGlwY2ZvaWxia2locGFpa2lrZGFobGJkcGciLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElGb3JFeHRlbnNpb24iLCJleHBpcnkiOjE3NjA0ODYzOTl9',
+    'AhQwihN/6tvpHCMPUcXE/k4eEmugYRr5RNRr16r9zixTUDqtVhnIVopBz3JpT63umN/Ih2hPWnLjBzIAy7oUjQcAAAB4eyJvcmlnaW4iOiJjaHJvbWUtZXh0ZW5zaW9uOi8vamxrampramFhbHBvZG5nZGlmYWZpamttbW1rZmJuZmUiLCJmZWF0dXJlIjoiQUlQcm9tcHRBUElGb3JFeHRlbnNpb24iLCJleHBpcnkiOjE3NjA0ODYzOTl9',
   ],
-  host_permissions: ['<all_urls>'],
   action: {
     default_title: 'Ask my Website',
     default_popup: 'src/popup.html',

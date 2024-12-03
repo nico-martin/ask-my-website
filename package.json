@@ -1,7 +1,7 @@
 {
   "name": "ask-my-website",
   "title": "Ask my Website",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A Chrome extension that uses PromptAPI and vector embeddings to help users quickly find answers about the current website's content.",
   "main": "src/index.ts",
   "type": "module",

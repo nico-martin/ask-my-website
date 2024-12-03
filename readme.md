@@ -1,7 +1,7 @@
 ![Ask my Website](https://uploads.nico.dev/ask-my-website.png)
 
 # Ask my website
-"Ask my Website" is a Chrome extension that uses PromptAPI and vector embeddings to help users quickly find answers about the current website's content.
+"Ask my Website" is a Chrome extension that uses the PromptAPI and vector embeddings to help users quickly find answers about the current website's content.
 
 ## What problems does it solve?
 The goal of this extension is to use a larrge language model to help users quickly find answers to questions about the current website's content.  
@@ -24,7 +24,7 @@ The core of the extension is a RAG set up. This means that we use a predefined p
 
 1. The content of the website is parsed and split into sections. Each section consists of the heading (H1, H2, H3) and the following paragraphs (p, li or td tags)
 2. Each paragraph is then vectorized using a `sentence-transformers` library with [Transformers.js](https://huggingface.co/docs/transformers.js/en/index)
-3. Once the use asks a question the extension will find the most similar paragraphs and adds its section as context to the prompt. The paragraph itself is considered a "source"
+3. Once the user asks a question the extension will find the most similar paragraphs and adds its section as context to the prompt. The paragraph itself is considered a "source"
 4. The prompt is then sent to the PromptAPI and the answer is displayed to the user
 5. The sources are displayed as well and can easily be accessed
 
